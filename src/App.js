@@ -5,6 +5,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import HomePage from "./pages/home-page/HomePage";
 import SignIn from "./components/sign-in/SignIn";
 import SignUp from "./components/sign-up/SignUp";
+import Spinner from "./components/spinner/Spinner";
 // firebase
 import { auth } from "./firebase/firebase";
 // style
@@ -24,7 +25,9 @@ class App extends Component {
     });
   }
   render() {
-    return (
+    return this.props.isLoading ? (
+      <Spinner />
+    ) : (
       <div className="App">
         <Switch>
           <Route exact path="/" component={HomePage} />
