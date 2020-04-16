@@ -86,15 +86,21 @@ class SignUp extends Component {
           email,
           password
         );
-        console.log("new user is ", user);
         await user.updateProfile({
           displayName: username,
           photoURL: `http://gravatar.com/avatar/${md5(user.email)}?d=identicon`,
         });
         await this.saveUser(user);
+        this.setState({
+          username: "",
+          email: "",
+          password: "",
+          passwordConfirmation: "",
+          errors: [],
+          loading: false,
+        });
       }
     } catch (error) {
-      console.log(error);
       this.setState({ errors: errors.concat(error), loading: false });
     }
   };
@@ -108,7 +114,6 @@ class SignUp extends Component {
   };
 
   handleError = (errors, inputName) => {
-    console.log('er',errors);
     return errors.some((error) =>
       error.message.toLowerCase().includes(inputName)
     )

@@ -34,26 +34,28 @@ class SignIn extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handSubmit = async (event) => {
+  handSubmit = (event) => {
     event.preventDefault();
     const { email, password, errors } = this.state;
-
-    try {
-      if (this.isFormValid()) {
-        this.setState({ errors: [], loading: true });
-        const { user } = await auth.signInWithEmailAndPassword(email, password);
-        console.log("user is ", user);
-        console.log('fafafafa')
-        this.setState({
-          email: "",
-          password: "",
-          errors: [],
-          loading: false,
+    if (this.isFormValid()) {
+      this.setState({ errors: [], loading: true });
+      auth
+        .signInWithEmailAndPassword(email, password)
+        .then((signedInUser) => {
+          console.log(signedInUser);
+          this.setState({
+            email: "",
+            password: "",
+            errors: [],
+            loading: false,
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            errors: errors.concat(err),
+            loading: false,
+          });
         });
-      }
-    } catch (error) {
-      console.log('ererere',error)
-      this.setState({ errors: errors.concat(error), loading: false });
     }
   };
 
