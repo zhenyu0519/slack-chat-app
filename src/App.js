@@ -13,14 +13,18 @@ import "semantic-ui-css/semantic.min.css";
 import "./globalStyles.css";
 // redux
 import { connect } from "react-redux";
-import { setUser } from "./redux/user/userActions";
+import { setUser, clearUser } from "./redux/user/userActions";
+
 class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log("user", user);
+        console.log('user is ', user)
         this.props.setUser(user);
         this.props.history.push("/");
+      } else {
+        this.props.history.push("/signin");
+        this.props.clearUser();
       }
     });
   }
@@ -45,6 +49,7 @@ const mapStateToProps = ({ user: { isLoading, currentUser } }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setUser: (user) => dispatch(setUser(user)),
+  clearUser: () => dispatch(clearUser()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
