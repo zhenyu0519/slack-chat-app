@@ -17,7 +17,7 @@ import { auth } from "../../firebase/firebase";
 // md5
 import md5 from "md5";
 
-export default class extends Component {
+class SignUp extends Component {
   constructor() {
     super();
     this.state = {
@@ -92,14 +92,6 @@ export default class extends Component {
           photoURL: `http://gravatar.com/avatar/${md5(user.email)}?d=identicon`,
         });
         await this.saveUser(user);
-        this.setState({
-          username: "",
-          email: "",
-          password: "",
-          passwordConfirmation: "",
-          errors: [],
-          loading: false,
-        });
       }
     } catch (error) {
       console.log(error);
@@ -116,6 +108,7 @@ export default class extends Component {
   };
 
   handleError = (errors, inputName) => {
+    console.log('er',errors);
     return errors.some((error) =>
       error.message.toLowerCase().includes(inputName)
     )
@@ -209,3 +202,5 @@ export default class extends Component {
     );
   }
 }
+
+export default SignUp;
