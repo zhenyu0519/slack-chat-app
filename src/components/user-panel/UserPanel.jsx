@@ -7,7 +7,6 @@ import { auth } from "../../firebase/firebase";
 import { connect } from "react-redux";
 
 const UserPanel = ({ currentUser }) => {
-  console.log("userpanel", currentUser.displayName);
   const handleSignout = () => {
     auth.signOut().then(() => console.log("signed out"));
   };

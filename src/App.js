@@ -19,11 +19,9 @@ class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('user is ', user)
         this.props.setUser(user);
         this.props.history.push("/");
       } else {
-        console.log('np user is ', user)
         this.props.history.push("/signin");
         this.props.clearUser();
       }
