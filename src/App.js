@@ -23,6 +23,7 @@ class App extends Component {
         this.props.setUser(user);
         this.props.history.push("/");
       } else {
+        console.log('np user is ', user)
         this.props.history.push("/signin");
         this.props.clearUser();
       }

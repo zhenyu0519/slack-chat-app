@@ -79,29 +79,40 @@ class SignUp extends Component {
     event.preventDefault();
     const { username, email, password, errors } = this.state;
 
-    try {
-      if (this.isFormValid()) {
-        this.setState({ errors: [], loading: true });
-        const { user } = await auth.createUserWithEmailAndPassword(
-          email,
-          password
-        );
-        await user.updateProfile({
-          displayName: username,
-          photoURL: `http://gravatar.com/avatar/${md5(user.email)}?d=identicon`,
+    if (this.isFormValid()) {
+      this.setState({ errors: [], loading: true });
+
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((createdUser) => {
+          console.log(createdUser);
+          createdUser.user
+            .updateProfile({
+              displayName: username,
+              photoURL: `http://gravatar.com/avatar/${md5(
+                createdUser.user.email
+              )}?d=identicon`,
+            })
+            .then(() => {
+              this.saveUser(createdUser).then(() => {
+                console.log("user saved");
+              });
+            })
+            .catch((err) => {
+              this.setState({ errors: errors.concat(err), loading: false });
+            });
+        })
+        .catch((err) => {
+          this.setState({ errors: errors.concat(err), loading: false });
         });
-        await this.saveUser(user);
-        this.setState({
-          username: "",
-          email: "",
-          password: "",
-          passwordConfirmation: "",
-          errors: [],
-          loading: false,
-        });
-      }
-    } catch (error) {
-      this.setState({ errors: errors.concat(error), loading: false });
+      this.setState({
+        username: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+        errors: [],
+        loading: false,
+      });
     }
   };
   saveUser = (user) => {
